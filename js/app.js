@@ -94,7 +94,7 @@ async function initApp() {
 async function registerServiceWorker() {
   if ('serviceWorker' in navigator) {
     try {
-      const registration = await navigator.serviceWorker.register('/sw.js');
+      const registration = await navigator.serviceWorker.register('./sw.js');
       console.log('Service Worker registered:', registration.scope);
       
       registration.addEventListener('updatefound', () => {
@@ -132,6 +132,10 @@ function setupEventListeners() {
       this.style.height = 'auto';
       this.style.height = Math.min(this.scrollHeight, 150) + 'px';
     });
+    elements.messageInput.addEventListener('keydown', handleKeyDown);
+  }
+  if (elements.sendBtn) {
+    elements.sendBtn.addEventListener('click', sendMessage);
   }
   
   // Temperature slider
