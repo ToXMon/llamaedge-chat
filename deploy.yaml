@@ -1,0 +1,94 @@
+---
+# LlamaEdge Chat - Akash Network SDL Deployment
+# Deploy a mobile-friendly ChatGPT-like interface with GPU-accelerated LLM inference
+# 
+# Requirements:
+#   - NVIDIA GPU (any model)
+#   - Competitive pricing for GPU providers (20000 uakt)
+#   - No SSL certificate restrictions for mobile compatibility
+#
+# Usage:
+#   akash tx deployment create deploy.yaml --from $AKASH_KEY_NAME
+#   akash provider send-manifest deploy.yaml --dseq $AKASH_DSEQ --provider $AKASH_PROVIDER --from $AKASH_KEY_NAME
+
+version: "2.0"
+
+services:
+  llamaedge-chat:
+    image: secondstate/qwen-2-0.5b-allminilm-2:cuda12
+    env:
+      - WASMEDGE_PLUGIN_PATH=/usr/local/lib/wasmedge
+      - LC_ALL=C.UTF-8
+      - LANG=C.UTF-8
+    expose:
+      - port: 8080
+        as: 8080
+        to:
+          - global: true
+    params:
+      storage:
+        data:
+          mount: /data
+profiles:
+  compute:
+    llamaedge-chat:
+      resources:
+        cpu:
+          units: 2
+        memory:
+          size: 4Gi
+        storage:
+          - size: 10Gi
+            name: data
+        gpu:
+          units: 1
+          attributes:
+            vendor:
+              nvidia:
+                - model: "*"  # Accept any NVIDIA GPU
+  placement:
+    akash:
+      pricing:
+        llamaedge-chat:
+          denom: uakt
+          amount: 20000  # Competitive pricing for GPU providers (15k-20k recommended)
+      signedBy:
+        allOf: []       # No attestation restrictions - maximize provider options
+      attributes:
+        host: "*"       # No host restrictions - accept any provider with GPU
+
+deployment:
+  llamaedge-chat:
+    akash:
+      profile: llamaedge-chat
+      count: 1
+
+# ---
+# Deployment Notes:
+# 
+# 1. FIRST REQUEST TIMEOUT:
+#    The first API request takes 60-120 seconds while the model loads into GPU memory.
+#    Subsequent requests are fast. Configure your HTTP timeout to 120000ms+ for first calls.
+#
+# 2. PROVIDER SELECTION:
+#    - Choose providers with VALID SSL certificates for mobile compatibility
+#    - Avoid providers with self-signed certificates (blocks mobile browsers)
+#    - Ensure provider has NVIDIA GPU capabilities
+#
+# 3. PRICING:
+#    - 20,000 uakt is competitive for GPU providers
+#    - Lower prices (below 15,000) may land on CPU-only providers and fail
+#
+# 4. MODELS INCLUDED:
+#    - Qwen2-0.5B-Instruct (Chat) - optimized for edge/mobile, Q5_K_M quantized
+#    - all-MiniLM-L6-v2 (Embeddings) - for semantic search/RAG
+#
+# 5. API ENDPOINTS:
+#    - GET  /v1/models           - List available models
+#    - POST /v1/chat/completions - Chat completion (OpenAI-compatible)
+#    - POST /v1/embeddings       - Generate embeddings
+#
+# 6. MOBILE ACCESS:
+#    The container includes a full web UI accessible at the root path (/)
+#    No app installation required - works on any device with a browser
+# ---
