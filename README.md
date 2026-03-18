@@ -1,388 +1,288 @@
-# 🦙 LlamaEdge Chat - Decentralized LLM Inference on Akash Network
+# 🦙 LlamaEdge Chat PWA
 
-> **Mobile-friendly ChatGPT-like interface powered by GPU-accelerated inference on decentralized infrastructure**
+A production-ready **Progressive Web App** for AI chat, powered by **WasmEdge** and **Akash Network**. Chat with the Qwen2-0.5B model running on decentralized cloud infrastructure.
 
-[![Deploy on Akash](https://img.shields.io/badge/Deploy%20on-Akash%20Network-blue)](https://akash.network)
-[![WasmEdge](https://img.shields.io/badge/Powered%20by-WasmEdge-orange)](https://wasmedge.org)
-[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
-
----
-
-## 🌟 Overview
-
-LlamaEdge Chat demonstrates the power of **decentralized, on-demand LLM inference** accessible from any device. Deploy a fully functional ChatGPT-like interface on Akash Network's GPU infrastructure and access it from your phone, tablet, or laptop - anywhere with an internet connection.
-
-### 🚀 Live Demo
-
-**Working Deployment:** [http://i69n6n8iklad1ffiij5qmeo1mc.ingress.h100.ams.val.akash.pub/](http://i69n6n8iklad1ffiij5qmeo1mc.ingress.h100.ams.val.akash.pub/)
-
-> ⚠️ First request takes 60-120 seconds while the model loads into GPU memory. Subsequent requests are fast.
-
----
+![LlamaEdge Chat PWA](icons/icon-512.png)
 
 ## ✨ Features
 
-- 📱 **Mobile-First Design** - Responsive ChatGPT-like UI that works beautifully on phones, tablets, and desktops
-- ⚡ **GPU-Accelerated Inference** - Leverages NVIDIA CUDA for fast response generation
-- 🌐 **OpenAI-Compatible API** - Standard REST endpoints (`/v1/chat/completions`, `/v1/embeddings`, `/v1/models`)
-- 🔗 **CORS Enabled** - Cross-origin support for integration with any web application
-- 💬 **Multi-Turn Conversations** - Full conversation history support
-- 🎯 **Dual Model Support**:
-  - **Chat:** Qwen2-0.5B-Instruct (optimized for edge/mobile)
-  - **Embeddings:** all-MiniLM-L6-v2 (for semantic search/RAG)
+### Progressive Web App
+- 📱 **Installable** - Add to home screen on iOS/Android/Desktop
+- 🚀 **Offline Support** - App shell cached for offline access
+- 🎨 **Standalone Mode** - Full-screen app without browser UI
+- 🔄 **Auto-Update** - Service worker handles seamless updates
 
----
+### User Interface
+- 🌓 **Dark/Light Theme** - Toggle between themes
+- 📋 **Chat History** - Persistent conversation storage
+- 💾 **Export Conversations** - Download as JSON
+- 📊 **Response Statistics** - Track message count and timing
+- 🔔 **Offline Indicator** - Visual network status
 
-## 💡 Novel Value Proposition
+### Configurable
+- ⚙️ **Custom API Endpoint** - Point to your own Akash deployment
+- 🎛️ **Model Parameters** - Adjust temperature, max tokens
+- 🤖 **WebLLM Support** - Optional local inference (WebGPU)
 
-This project combines three cutting-edge technologies in a novel way:
-
-| Component | Technology | Innovation |
-|-----------|------------|------------|
-| **Runtime** | WasmEdge | Lightweight, portable WebAssembly runtime with GPU support |
-| **Infrastructure** | Akash Network | Decentralized, permissionless GPU marketplace |
-| **Interface** | Mobile Web UI | No app installation required, works on any device |
-
-### Why This Matters
-
-- **Decentralized:** No reliance on big tech cloud providers - deploy on a global network of independent providers
-- **On-Demand:** Spin up GPU inference capacity only when you need it, pay by the second
-- **Accessible:** Full web interface included - no app store, no installation, just a URL
-- **Efficient:** Qwen2-0.5B was originally designed for edge/mobile - runs efficiently on any GPU
-
----
-
-## 🎯 Use Cases
-
-### 1. 📱 Mobile Chat Assistant
-Access a personal AI assistant from your phone without installing any app. Perfect for quick questions, brainstorming, or creative writing on the go.
-
-### 2. 🔍 Semantic Search / RAG Pipelines
-Use the embeddings endpoint (`/v1/embeddings`) to build semantic search, document retrieval, or RAG (Retrieval-Augmented Generation) applications.
-
-### 3. ✈️ In-Flight Productivity
-**Yes, this works on planes with WiFi!** Access your personal AI assistant while traveling - no local GPU required.
-
-### 4. 🧪 API Testing & Development
-Use the included `index.html` as an API testing interface for your LLM-powered applications.
-
----
-
-## 🤔 FAQ: Does This Satisfy "On-Demand Local Inference for Mobile Devices on a Plane"?
-
-### ✅ YES - With Caveats
-
-| Aspect | Status | Notes |
-|--------|--------|-------|
-| **Mobile Accessible** | ✅ | Works on any device with a browser |
-| **On-Demand** | ✅ | Deploy/spin down instances as needed |
-| **Plane Compatible** | ✅ | Works if the plane has WiFi |
-| **No App Install** | ✅ | Full web UI included in the container |
-| **GPU Accelerated** | ✅ | Runs on decentralized GPU infrastructure |
-
-### The "Local" Nuance
-
-The model (Qwen2-0.5B) is small enough that it **COULD** run locally on mobile devices - that was its original design goal. However, we're using **decentralized cloud GPU** for better performance:
-
-- **Local Mobile:** ~1-2 tokens/second, drains battery
-- **Akash GPU:** ~50-100 tokens/second, no battery impact
-
-### The Novel Combination
-
-```
-┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│   Mobile Device │ ←── │  Akash Network  │ ←── │   WasmEdge      │
-│   (Any Browser) │     │   GPU Provider  │     │   Runtime       │
-└─────────────────┘     └─────────────────┘     └─────────────────┘
-         ↓                       ↓                       ↓
-   No App Required        Decentralized          Lightweight + Fast
-   Just a URL              On-Demand             GPU-Accelerated
-```
-
----
+### Mobile-First Design
+- 📱 Bottom navigation bar
+- 👆 Touch-optimized interface
+- 📐 Responsive layout
+- ⌨️ Mobile keyboard handling
 
 ## 🚀 Quick Start
 
-### Option 1: Use Our Deployment
+### Option 1: GitHub Pages (Demo)
 
-Simply visit the live demo URL and start chatting:
+Visit the live demo: [https://toxmon.github.io/llamaedge-chat/](https://toxmon.github.io/llamaedge-chat/)
 
-```
-http://i69n6n8iklad1ffiij5qmeo1mc.ingress.h100.ams.val.akash.pub/
-```
+### Option 2: Self-Host on Akash
 
-### Option 2: Deploy Your Own
-
-1. **Prerequisites**
-   - [Akash CLI](https://docs.akash.network/guides/install) installed
-   - Funded wallet with AKT tokens
-   - Docker (optional, for local testing)
-
-2. **Deploy to Akash**
-   ```bash
-   # Clone this repo
-   git clone https://github.com/ToXMon/llamaedge-chat.git
-   cd llamaedge-chat
-   
-   # Create deployment
-   akash tx deployment create deploy.yaml --from $AKASH_KEY_NAME
-   
-   # Send manifest
-   akash provider send-manifest deploy.yaml \
-     --dseq $AKASH_DSEQ \
-     --provider $AKASH_PROVIDER \
-     --from $AKASH_KEY_NAME
-   ```
-
-3. **Access Your Deployment**
-   - Get the URI from your provider
-   - Open in browser or use the API directly
-
----
-
-## 📋 Step-by-Step Akash Deployment
-
-### 1. Install Akash CLI
+Deploy your own instance on Akash Network:
 
 ```bash
-# macOS/Linux
-curl -sfL https://raw.githubusercontent.com/akash-network/provider/main/install.sh | sh
-
-# Or with Homebrew
-brew install akash-network/tap/akash
-```
-
-### 2. Fund Your Wallet
-
-```bash
-# Create wallet
-akash keys add mywallet --from mywallet
-
-# Get address
-akash keys show mywallet -a
-
-# Fund with AKT (use an exchange or faucet)
-```
-
-### 3. Create Deployment
-
-```bash
-# Set variables
-export AKASH_KEY_NAME="mywallet"
-export AKASH_ACCOUNT_ADDRESS="$(akash keys show $AKASH_KEY_NAME -a)"
-
-# Create certificate
-akash tx cert create client --from $AKASH_KEY_NAME
-
 # Create deployment
-akash tx deployment create deploy.yaml \
-  --from $AKASH_KEY_NAME \
-  --deposit 5000000uakt \
-  --fees 5000uakt
-```
+akash tx deployment create deploy-pwa.yaml --from <your-key>
 
-### 4. Select Provider
+# Create lease
+akash create lease --dseq <dseq> --from <your-key>
 
-```bash
-# List available providers
-akash query provider list
-
-# View bids on your deployment
-akash query market bid list \
-  --owner $AKASH_ACCOUNT_ADDRESS \
-  --dseq $AKASH_DSEQ
-
-# Create lease (choose the best provider)
-akash tx market lease create \
-  --dseq $AKASH_DSEQ \
-  --provider $AKASH_PROVIDER \
-  --from $AKASH_KEY_NAME
-```
-
-### 5. Send Manifest & Access
-
-```bash
 # Send manifest
-akash provider send-manifest deploy.yaml \
-  --dseq $AKASH_DSEQ \
-  --provider $AKASH_PROVIDER \
-  --from $AKASH_KEY_NAME
-
-# Get service status/URI
-akash provider lease-status \
-  --dseq $AKASH_DSEQ \
-  --provider $AKASH_PROVIDER \
-  --from $AKASH_KEY_NAME
+akash send-manifest deploy-pwa.yaml --dseq <dseq> --provider <provider> --from <your-key>
 ```
 
----
-
-## ⚠️ Provider Selection Guidance
-
-> **Critical for mobile use:** Not all Akash providers are equal. Choose wisely!
-
-### ✅ DO: Choose Trusted Providers With:
-
-| Requirement | Why It Matters |
-|-------------|----------------|
-| **Valid SSL Certificates** | Mobile browsers block self-signed certs |
-| **GPU Capabilities** | Required for CUDA images (no CPU fallback) |
-| **Competitive Pricing** | Ensures you win bids on GPU providers |
-
-### ❌ AVOID:
-
-- **Self-Signed Certificates** - Causes mobile browser security warnings
-- **CPU-Only Providers** - Will fail with `libcuda.so.1: cannot open shared object file`
-- **Overly Cheap Bids** - Often CPU-only or unreliable
-
-### 💰 Pricing Recommendations
-
-| Resource | Recommended Price |
-|----------|-------------------|
-| **GPU Hour** | 15,000 - 20,000 uakt |
-| **CPU Core** | 500 - 1,000 uakt |
-| **Memory (1Gi)** | 100 - 200 uakt |
-
-> **Pro Tip:** Set your SDL price at 20,000 uakt to be competitive for GPU providers.
-
-### 🔍 How to Check Provider SSL
+### Option 3: Local Development
 
 ```bash
-# Test provider endpoint
-curl -I https://provider.example.com
+# Clone the repository
+git clone https://github.com/ToXMon/llamaedge-chat.git
+cd llamaedge-chat
 
-# Look for valid SSL cert, NOT self-signed
-# Good: "issuer: C=US; O=Let's Encrypt..."
-# Bad: "issuer: CN=fake-kubernetes-ingress-cert"
+# Serve locally (any static server works)
+python -m http.server 8000
+# or
+npx serve .
+
+# Open http://localhost:8000
 ```
 
----
+## 📲 Installation
 
-## 📦 Models Included
+### iOS (Safari)
+1. Open the app in Safari
+2. Tap the Share button (square with arrow)
+3. Scroll down and tap "Add to Home Screen"
+4. Name it "LLM Chat" and tap "Add"
 
-### Chat Model: Qwen2-0.5B-Instruct
+### Android (Chrome)
+1. Open the app in Chrome
+2. Tap the menu (three dots)
+3. Tap "Add to Home screen" or "Install app"
+4. Confirm installation
 
-| Property | Value |
-|----------|-------|
-| **Size** | 0.5B parameters |
-| **Quantization** | Q5_K_M (5-bit) |
-| **Context Length** | 32K tokens |
-| **Purpose** | Conversational AI, Q&A, Creative Writing |
-| **Edge Optimized** | ✅ Originally designed for mobile/edge devices |
+### Desktop (Chrome/Edge)
+1. Visit the app URL
+2. Look for install icon in address bar
+3. Click "Install" when prompted
+4. Or use menu → "Install LlamaEdge Chat"
 
-### Embedding Model: all-MiniLM-L6-v2
+## ⚙️ Configuration
 
-| Property | Value |
-|----------|-------|
-| **Size** | 22M parameters |
-| **Dimensions** | 384 |
-| **Purpose** | Semantic search, RAG, document embeddings |
-| **Speed** | Very fast, ideal for real-time use |
+### API Endpoint
 
----
+Default endpoint points to the Akash deployment:
+```
+https://2h3kect6s5f0be89fq2l4iovk8.ingress.akash.profszone.xyz/v1/chat/completions
+```
 
-## 🔧 API Usage
+To use your own deployment:
+1. Open Settings (gear icon)
+2. Enter your endpoint URL
+3. Adjust model name if needed
+4. Click "Save Settings"
+
+### Model Parameters
+
+| Parameter | Default | Range | Description |
+|-----------|---------|-------|-------------|
+| Max Tokens | 2048 | 100-8192 | Maximum response length |
+| Temperature | 0.7 | 0.0-2.0 | Creativity level |
+
+## 🤖 WebLLM (Local Inference)
+
+The PWA supports optional **browser-based inference** using WebGPU:
+
+### Requirements
+- Chrome 113+ or Edge 113+ (Desktop/Android)
+- WebGPU support (not available on Safari/Firefox yet)
+- ~800MB VRAM for Qwen2-0.5B model
+
+### Enabling WebLLM
+1. Open Settings
+2. Toggle "Enable WebLLM"
+3. Wait for model download (~800MB)
+4. Once loaded, all inference runs locally!
+
+### Benefits
+- ✈️ **True Offline** - Works without internet after model loads
+- 🔒 **Privacy** - All processing on your device
+- 💨 **No Latency** - No network round-trips
+
+### Supported Models
+| Model | VRAM | Description |
+|-------|------|-------------|
+| Qwen2-0.5B | ~800MB | Fast, mobile-friendly |
+| Qwen2-1.5B | ~1.5GB | Better quality |
+| Phi-3 Mini | ~2GB | Microsoft model |
+
+## 🏗️ Architecture
+
+```
+llamaedge-chat/
+├── index.html          # Main SPA entry
+├── manifest.json       # PWA manifest
+├── sw.js              # Service worker
+├── css/
+│   └── app.css        # Styles with themes
+├── js/
+│   ├── app.js         # Main application
+│   └── webllm.js      # WebLLM integration
+├── icons/
+│   ├── icon.svg       # Vector icon
+│   └── icon-*.png     # PNG icons (72-512px)
+├── deploy.yaml        # API server SDL
+├── deploy-pwa.yaml    # PWA hosting SDL
+└── nginx.conf         # Nginx configuration
+```
+
+## 🚢 Deployment
+
+### GitHub Pages
+
+The app automatically deploys to GitHub Pages from the `main` branch.
+
+1. Push changes to `main`
+2. GitHub Actions builds and deploys
+3. Live at `https://toxmon.github.io/llamaedge-chat/`
+
+### Akash Network
+
+For decentralized hosting:
+
+```yaml
+# deploy-pwa.yaml - Akash SDL for PWA hosting
+services:
+  web:
+    image: nginx:alpine
+    expose:
+      - port: 80
+        as: 80
+        to:
+          - global: true
+```
+
+### API Server
+
+Deploy the LlamaEdge API server:
+
+```yaml
+# deploy.yaml - Akash SDL for LlamaEdge API
+services:
+  api:
+    image: secondstate/qwen-2-0.5b-allminilm-2:cuda12
+    expose:
+      - port: 8080
+        as: 8080
+        to:
+          - global: true
+```
+
+## 🔧 Development
+
+### Local Setup
+
+```bash
+# Clone repo
+git clone https://github.com/ToXMon/llamaedge-chat.git
+cd llamaedge-chat
+
+# Serve locally
+python -m http.server 8000
+
+# Open http://localhost:8000
+```
+
+### Testing PWA Features
+
+1. Chrome DevTools → Application tab
+2. Check "Bypass for network" for testing
+3. Use "Update" button to reload service worker
+4. Test offline mode in Network tab
+
+### Building Icons
+
+Icons are pre-generated. To regenerate:
+
+```bash
+# Using Python
+pip install cairosvg pillow
+python -c "
+import cairosvg
+sizes = [72, 96, 128, 144, 152, 192, 384, 512]
+for s in sizes:
+    cairosvg.svg2png(url='icons/icon.svg', 
+                     write_to=f'icons/icon-{s}.png',
+                     output_width=s, output_height=s)
+"
+```
+
+## 📝 API Usage
 
 ### Chat Completion
 
 ```bash
-curl -X POST https://your-akash-uri/v1/chat/completions \
+curl -X POST https://your-endpoint/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
     "model": "Qwen2-0.5B-Instruct-Q5_K_M.gguf",
-    "messages": [
-      {"role": "user", "content": "Hello!"}
-    ],
+    "messages": [{"role": "user", "content": "Hello!"}],
     "max_tokens": 2048,
     "temperature": 0.7
-  }'
-```
-
-### Embeddings
-
-```bash
-curl -X POST https://your-akash-uri/v1/embeddings \
-  -H "Content-Type: application/json" \
-  -d '{
-    "model": "all-MiniLM-L6-v2-ggml-model-f16.gguf",
-    "input": "Hello, world!"
   }'
 ```
 
 ### List Models
 
 ```bash
-curl https://your-akash-uri/v1/models
+curl https://your-endpoint/v1/models
 ```
 
----
+## ⚠️ Known Issues
 
-## 🐳 Docker Image
-
-This deployment uses the official LlamaEdge image with pre-loaded models:
-
-```dockerfile
-FROM secondstate/qwen-2-0.5b-allminilm-2:cuda12
-```
-
-**Includes:**
-- WasmEdge runtime with CUDA support
-- Qwen2-0.5B-Instruct model (Q5_K_M quantized)
-- all-MiniLM-L6-v2 embedding model
-- OpenAI-compatible API server
-- Full web UI (served at root path)
-
----
-
-## 📁 Repository Structure
-
-```
-llamaedge-chat/
-├── README.md          # This documentation
-├── deploy.yaml        # Akash SDL deployment file
-├── index.html         # Mobile-friendly chat interface
-└── LICENSE            # MIT License
-```
-
----
+1. **First Request Slow** - Initial API call takes 60-120s while model loads to GPU
+2. **SSL Certificate** - Akash providers may use self-signed certificates
+3. **WebGPU Support** - Not available in Safari/Firefox yet
+4. **iOS PWA Storage** - localStorage may be cleared by iOS when low on storage
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
-
 1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
----
+2. Create feature branch (`git checkout -b feature/amazing`)
+3. Commit changes (`git commit -m 'Add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing`)
+5. Open Pull Request
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT License - See [LICENSE](LICENSE) for details.
+
+## 🙏 Credits
+
+- **WasmEdge** - WebAssembly runtime for AI
+- **Akash Network** - Decentralized cloud infrastructure
+- **Qwen Team** - Qwen2 language model
+- **WebLLM** - In-browser LLM inference
 
 ---
 
-## 🙏 Acknowledgments
-
-- [WasmEdge](https://wasmedge.org) - The lightweight, high-performance WebAssembly runtime
-- [Akash Network](https://akash.network) - The decentralized cloud marketplace
-- [Qwen Team](https://github.com/QwenLM) - For the excellent Qwen language models
-- [Second State](https://secondstate.io) - For the LlamaEdge project and Docker images
-
----
-
-## 📞 Support
-
-- **Issues:** [GitHub Issues](https://github.com/ToXMon/llamaedge-chat/issues)
-- **Akash Discord:** [Join here](https://discord.gg/akash)
-- **WasmEdge Discord:** [Join here](https://discord.gg/wasmedge)
-
----
-
-<div align="center">
-  <strong>Built with ❤️ for the decentralized future</strong>
-  <br>
-  <sub>Powered by WasmEdge + Akash Network</sub>
-</div>
+**Built with ❤️ for the decentralized AI community**
