@@ -580,12 +580,14 @@ async function sendMessage() {
     setStatus('ready', 'Ready');
     
   } catch (error) {
-    console.error('Error:', error);
+    console.error('[Chat] Error during message send:', error);
     removeLoadingIndicator();
     
     let errorMessage = error.message;
-    if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
-      errorMessage = 'Network error. Check your connection or API endpoint.';
+    if (error.httpStatus === 503) {
+      errorMessage = `API server unavailable (503) — it may be down or overloaded. Try again shortly or check the endpoint in Settings.`;
+    } else if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError') || error.message.includes('Network error')) {
+      errorMessage = 'Network error. Check your connection or API endpoint in Settings.';
     }
     
     addMessageToUI('assistant', 'Error: ' + errorMessage, new Date().toISOString(), true);
@@ -597,34 +599,57 @@ async function sendMessage() {
 }
 
 async function generateAPIResponse() {
-  const response = await fetch(appState.config.endpoint, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      model: appState.config.model,
-      messages: appState.conversationHistory.map(m => ({ role: m.role, content: m.content })),
-      max_tokens: appState.config.maxTokens,
-      temperature: appState.config.temperature,
-      stream: false
-    })
-  });
-  
+  const endpoint = appState.config.endpoint;
+  const model = appState.config.model;
+  console.log(`[API] Request → endpoint: ${endpoint}`);
+  console.log(`[API] Model: ${model} | maxTokens: ${appState.config.maxTokens} | temp: ${appState.config.temperature}`);
+
+  let response;
+  try {
+    response = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: model,
+        messages: appState.conversationHistory.map(m => ({ role: m.role, content: m.content })),
+        max_tokens: appState.config.maxTokens,
+        temperature: appState.config.temperature,
+        stream: false
+      })
+    });
+  } catch (fetchError) {
+    console.error('[API] Fetch failed (network/CORS error):', fetchError);
+    throw new Error('Network error - could not reach the API endpoint. Check your connection and the endpoint in Settings.');
+  }
+
+  console.log(`[API] Response status: ${response.status} ${response.statusText}`);
+
   if (!response.ok) {
-    let errorMsg = `HTTP ${response.status}: ${response.statusText}`;
+    const statusText = response.statusText || 'Error';
+    let errorMsg = `HTTP ${response.status}: ${statusText}`;
     try {
       const errorData = await response.json();
-      errorMsg = errorData.error?.message || errorMsg;
-    } catch (e) {}
-    throw new Error(errorMsg);
+      console.error('[API] Error response body:', errorData);
+      // Handle both {error: {message: "..."}} and {error: "string"} formats
+      const extracted = errorData.error?.message || (typeof errorData.error === 'string' ? errorData.error : null);
+      if (extracted) errorMsg = extracted;
+    } catch (e) {
+      console.warn('[API] Could not parse error response body as JSON');
+    }
+    const err = new Error(errorMsg);
+    err.httpStatus = response.status;
+    throw err;
   }
-  
+
   const data = await response.json();
   const content = data.choices?.[0]?.message?.content;
-  
+
   if (!content) {
-    throw new Error('No response content received');
+    console.error('[API] Unexpected response structure:', data);
+    throw new Error('No response content received from API');
   }
-  
+
+  console.log(`[API] Success - received ${content.length} chars`);
   return content;
 }
 

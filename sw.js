@@ -68,14 +68,15 @@ self.addEventListener('fetch', (event) => {
           }
           return response;
         })
-        .catch(() => {
+        .catch((err) => {
           // Network failed, try cache; fall back to a proper error response so
           // respondWith() never receives undefined (which causes the
           // "Returned response is null" ServiceWorker error).
+          console.warn('[SW] API fetch failed, trying cache. Reason:', err && err.message || err);
           return caches.match(event.request).then(
             cached => cached || new Response(
-              JSON.stringify({ error: 'Network error and no cached response available' }),
-              { status: 503, headers: { 'Content-Type': 'application/json' } }
+              JSON.stringify({ error: { message: 'Network error - server unreachable and no cached response available' } }),
+              { status: 503, statusText: 'Service Unavailable', headers: { 'Content-Type': 'application/json' } }
             )
           );
         })
