@@ -69,8 +69,15 @@ self.addEventListener('fetch', (event) => {
           return response;
         })
         .catch(() => {
-          // Network failed, try cache
-          return caches.match(event.request);
+          // Network failed, try cache; fall back to a proper error response so
+          // respondWith() never receives undefined (which causes the
+          // "Returned response is null" ServiceWorker error).
+          return caches.match(event.request).then(
+            cached => cached || new Response(
+              JSON.stringify({ error: 'Network error and no cached response available' }),
+              { status: 503, headers: { 'Content-Type': 'application/json' } }
+            )
+          );
         })
     );
     return;
@@ -99,7 +106,9 @@ self.addEventListener('fetch', (event) => {
       .catch(() => {
         // Offline and not in cache - return offline page for navigation
         if (event.request.mode === 'navigate') {
-          return caches.match('./index.html');
+          return caches.match('./index.html').then(
+            cached => cached || new Response('Offline', { status: 503 })
+          );
         }
         return new Response('Offline', { status: 503 });
       })
